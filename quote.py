@@ -1,5 +1,6 @@
 import requests
 from datetime import date
+import streamlit as st
 
 def get_quote():
     response = requests.get("https://zenquotes.io/api/random")
@@ -11,7 +12,7 @@ def get_quote():
 def save_quote(quote, author):
     today = date.today()
     with open("quotes_log.text", "a") as f:
-        f.write(f"{today} - {quote} - {author}\n")
+        f.write(f"{today} - {quote} - {author}\n") 
 
 def main():
     quote, author = get_quote()
@@ -19,4 +20,12 @@ def main():
     save_quote(quote, author)
     print("✅ quote saved to quotes_log.text")
 
-main()    
+st.title("📖 Quote of the Day ")
+st.write("Click the button to get a motivational quote!")
+
+if st.button("Get Quote"):
+    quote, author = get_quote()
+    st.success(f'"{quote}')
+    st.write(f"- {author}")
+    save_quote(quote, author)
+    st.info("quote saved to quotes_log.text")
